@@ -1,0 +1,49 @@
+#!/bin/bash
+
+# insert here urls. 
+# version with hardcoded urls
+# LINK=(
+#    'http://185.38.12.60/sec/1521176474/333538352a721ac76d1e8508529087f413223f2166ba33ad/ivs/5f/08/6e08f2528bee/hls/tracks-4,5/segment' 
+# )
+
+# URL is taken as parameter
+LINK="$2"
+
+# mkdir my-videos
+# cd mkdir my-videos
+
+CNT=0
+
+for URL in ${LINK[@]}
+do
+  # create folder for streaming media
+  CNT=$((CNT + 1))
+  mkdir $CNT
+  cd $CNT
+
+  (
+
+   DIR="${URL##*/}"
+
+   # download all videos
+   wget $URL''{0..550}.ts
+   # or you can use "curl" instead of "wget"
+   # curl $URL''{0..550}.ts -o
+
+
+   # link videos
+   echo $DIR''{0..550}.ts | tr " " "\n" > tslist
+   while read line; do cat $line >> $CNT'_all.ts'; done < tslist
+
+   rm -rf media* tslist
+
+   # For better quality install "ffmpeg"
+   # if ffmpeg is intalled uncomment line below
+   ffmpeg -i $CNT'_all.ts' -acodec copy -vcodec copy -bsf:a aac_adtstoasc ../''$1''.mp4
+
+   ) &
+   cd ..
+
+done
+
+wait
