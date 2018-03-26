@@ -13,11 +13,12 @@ LINK="$2"
 # cd mkdir my-videos
 
 CNT=0
+CNT=$((CNT + 1))
+rm -rf ./$CNT
 
 for URL in ${LINK[@]}
 do
   # create folder for streaming media
-  CNT=$((CNT + 1))
   mkdir $CNT
   cd $CNT
 
@@ -29,7 +30,6 @@ do
    wget $URL''{0..550}.ts
    # or you can use "curl" instead of "wget"
    # curl $URL''{0..550}.ts -o
-
 
    # link videos
    echo $DIR''{0..550}.ts | tr " " "\n" > tslist
