@@ -4,20 +4,20 @@ import re
 import subprocess
 
 
-def runScript(name, link):
+def runScript(name):
+    link = raw_input('Link: ')
+    matchLink = re.match(r'.+/segment', link)
+
     if matchLink:
         # print(matchLink.group())
-        subprocess.check_call(['./downloadTS', name, link])
+        subprocess.check_call(['./downloadTS', name, matchLink.group()])
     else:
         print('SEGMENT NOT FOUND')
 
 
-name = str(sys.argv[1])
-link = raw_input('Link: ')
-matchLink = re.match(r'.+/segment', link)
-
-if name:
-    runScript(name, matchLink.group())
+if len(sys.argv) > 1:
+    name = str(sys.argv[1])
+    runScript(name)
 else:
     name = raw_input('Name: ')
-    runScript(name, matchLink.group())
+    runScript(name)
