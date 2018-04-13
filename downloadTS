@@ -27,12 +27,12 @@ do
    DIR="${URL##*/}"
 
    # download all videos
-   wget $URL''{0..550}.ts
+   wget $URL''{0..5}.ts
    # or you can use "curl" instead of "wget"
-   # curl $URL''{0..550}.ts -o
+   # curl $URL''{0..5}.ts -o
 
    # link videos
-   echo $DIR''{0..550}.ts | tr " " "\n" > tslist
+   echo $DIR''{0..5}.ts | tr " " "\n" > tslist
    while read line; do cat $line >> $CNT'_all.ts'; done < tslist
 
    rm -rf media* tslist
