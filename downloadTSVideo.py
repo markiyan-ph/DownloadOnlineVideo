@@ -17,7 +17,7 @@ def runScript(name):
 
 if len(sys.argv) > 1:
     name = str(sys.argv[1])
-    runScript(name)
 else:
     name = raw_input('Name: ')
-    runScript(name)
+
+runScript(name)
