@@ -8,6 +8,7 @@
 
 # URL is taken as parameter
 LINK="$2"
+NAME="$1"
 
 # mkdir my-videos
 # cd mkdir my-videos
@@ -39,7 +40,7 @@ do
 
    # For better quality install "ffmpeg"
    # if ffmpeg is intalled uncomment line below
-   ffmpeg -i $CNT'_all.ts' -acodec copy -vcodec copy -bsf:a aac_adtstoasc ../''$1''.mp4
+   ffmpeg -i $CNT'_all.ts' -acodec copy -vcodec copy -bsf:a aac_adtstoasc ../$NAME.mp4
 
    ) &
    cd ..
