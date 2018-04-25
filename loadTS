@@ -41,8 +41,8 @@ do
 
    # For better quality install "ffmpeg"
    # if ffmpeg is intalled uncomment line below
-   mkdir ../$FOLDERNAME
-   ffmpeg -i $CNT'_all.ts' -acodec copy -vcodec copy -bsf:a aac_adtstoasc ../$FOLDERNAME/$NAME.mp4
+   mkdir ../../$FOLDERNAME
+   ffmpeg -i $CNT'_all.ts' -acodec copy -vcodec copy -bsf:a aac_adtstoasc ../../$FOLDERNAME/$NAME.mp4
 
    ) &
    cd ..
