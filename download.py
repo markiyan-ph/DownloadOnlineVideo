@@ -1,5 +1,6 @@
 #!/usr/bin/python
 import sys
+import os
 import re
 import subprocess
 
@@ -20,10 +21,13 @@ def runScript(name):
     link = raw_input('Link: ')
     matchLink = re.match(r'.+/segment', link).group()
     folderName = getFolderName(name)
+    dirname = os.path.dirname(os.path.abspath(__file__))
+    script = os.path.join(dirname, 'loadTS')
 
     if matchLink:
-        # print(matchLink.group())
-        subprocess.check_call(['./loadTS', name, matchLink, folderName])
+        # print(matchLink)
+        # print(folderName)
+        subprocess.check_call([script, name, matchLink, folderName])
     else:
         print('SEGMENT NOT FOUND')
 
@@ -32,5 +36,6 @@ if len(sys.argv) > 1:
     name = str(sys.argv[1])
 else:
     name = raw_input('Name: ')
+
 
 runScript(name)
