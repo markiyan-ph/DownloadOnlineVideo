@@ -10,19 +10,20 @@
 LINK="$2"
 NAME="$1"
 FOLDERNAME="$3"
+CURRDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 # mkdir my-videos
 # cd mkdir my-videos
 
 CNT=0
 CNT=$((CNT + 1))
-rm -rf ./$CNT
+rm -rf $CURRDIR/$CNT
 
 for URL in ${LINK[@]}
 do
   # create folder for streaming media
-  mkdir $CNT
-  cd $CNT
+  mkdir $CURRDIR/$CNT
+  cd $CURRDIR/$CNT
 
   (
 
@@ -31,7 +32,7 @@ do
    # download all videos
    wget $URL''{0..550}.ts
    # or you can use "curl" instead of "wget"
-   # curl $URL''{0..550}.ts -o
+   # curl $URL''{0..900}.ts -o
 
    # link videos
    echo $DIR''{0..550}.ts | tr " " "\n" > tslist
