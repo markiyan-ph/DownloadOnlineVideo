@@ -1,0 +1,3 @@
+CURRDIR=pwd
+NAME="FILE_NAME"
+notify-send -i $CURRDIR/downloadB.png -t 3000 'File '$NAME' is downloaded'

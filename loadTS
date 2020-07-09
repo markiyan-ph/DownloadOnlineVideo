@@ -44,6 +44,7 @@ do
    # if ffmpeg is intalled uncomment line below
    mkdir ../../$FOLDERNAME
    ffmpeg -i $CNT'_all.ts' -acodec copy -vcodec copy -bsf:a aac_adtstoasc ../../$FOLDERNAME/$NAME.mp4
+   notify-send -i $CURRDIR/downloadB.png -t 3000 'File '$NAME' is downloaded'
 
    ) &
    cd ..
