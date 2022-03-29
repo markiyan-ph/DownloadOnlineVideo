@@ -1,16 +1,16 @@
 #!/bin/bash
 
-# insert here urls. 
+# insert here urls.
 # version with hardcoded urls
 # LINK=(
-#    'http://18550.38.12.60/sec/155021176474/3335503835502a721ac76d1e85500855029087f413223f2166ba33ad/ivs/550f/08/6e08f255028bee/hls/tracks-4,550/segment' 
+#    'http://18550.38.12.60/sec/155021176474/3335503835502a721ac76d1e85500855029087f413223f2166ba33ad/ivs/550f/08/6e08f255028bee/hls/tracks-4,550/segment'
 # )
 
 # URL is taken as parameter
 LINK="$2"
 NAME="$1"
 FOLDERNAME="$3"
-CURRDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+CURRDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # mkdir my-videos
 # cd mkdir my-videos
@@ -19,35 +19,41 @@ CNT=0
 CNT=$((CNT + 1))
 rm -rf $CURRDIR/$CNT
 
-for URL in ${LINK[@]}
-do
+for URL in ${LINK[@]}; do
   # create folder for streaming media
   mkdir $CURRDIR/$CNT
   cd $CURRDIR/$CNT
 
   (
 
-   DIR="${URL##*/}"
+    DIR="${URL##*/}"
 
-   # download all videos
-   wget $URL''{0..550}.ts
-   # or you can use "curl" instead of "wget"
-   # curl $URL''{0..900}.ts -o
+    # download all videos
+    wget $URL''{0..550}.ts
+    # or you can use "curl" instead of "wget"
+    # curl $URL''{0..900}.ts -o
 
-   # link videos
-   echo $DIR''{0..550}.ts | tr " " "\n" > tslist
-   while read line; do cat $line >> $CNT'_all.ts'; done < tslist
+    # link videos
+    echo $DIR''{0..550}.ts | tr " " "\n" >tslist
+    while read line; do cat $line >>$CNT'_all.ts'; done <tslist
 
-   rm -rf media* tslist
+    rm -rf media* tslist
 
-   # For better quality install "ffmpeg"
-   # if ffmpeg is intalled uncomment line below
-   mkdir ../../$FOLDERNAME
-   ffmpeg -i $CNT'_all.ts' -acodec copy -vcodec copy -bsf:a aac_adtstoasc ../../$FOLDERNAME/$NAME.mp4
-   notify-send -i $CURRDIR/downloadB.png -t 3000 'File '$NAME' is downloaded'
+    # For better quality install "ffmpeg"
+    # if ffmpeg is intalled uncomment line below
+    mkdir ../../$FOLDERNAME
+    ffmpeg -i $CNT'_all.ts' -acodec copy -vcodec copy -bsf:a aac_adtstoasc ../../$FOLDERNAME/$NAME.mp4
 
-   ) &
-   cd ..
+    # Show notification
+    # notify-send is working for Linux XFFCE
+    # notify-send -i $CURRDIR/downloadB.png -t 3000 'File '$NAME' is downloaded'
+
+    # Show notification on MacOS
+    # osascript -e 'display notification "File '$NAME' is downloaded" with title "Done"'
+    osascript -e 'display notification "File '$NAME' is downloaded"'
+
+  ) &
+  cd ..
 
 done
 
