@@ -1,5 +1,7 @@
 #!/bin/bash
 
+# Pattern should contain {X}
+# Example 360.mp4:hls:seg-{X}-v1-a1.ts
 FILEPATTERN="$1" 
 FILENAME="${2:-NewVideo}" 
 
