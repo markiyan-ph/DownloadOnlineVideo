@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 import sys
 import os
 import re
@@ -18,7 +18,7 @@ def getFolderName(name):
 
 
 def runScript(name):
-    #link = raw_input('Link: ')
+    # link = raw_input('Link: ')
     link = input('Link: ')
     matchLink = re.match(r'.+/segment', link).group()
     folderName = getFolderName(name)
@@ -36,7 +36,7 @@ def runScript(name):
 if len(sys.argv) > 1:
     name = str(sys.argv[1])
 else:
-    #name = raw_input('Name: ')
+    # name = raw_input('Name: ')
     name = input('Name: ')
 
 
