@@ -1,0 +1,18 @@
+#!/bin/bash
+
+FILEPATTERN="$1" 
+FILENAME="${2:-NewVideo}" 
+
+# ${FILEPATTERN/\{X\}/"*"} code it's a bash code (${parameter/pattern/string}) to replace {X} from pattern by * 
+# Cat command concantenate all ts files in one
+cat ${FILEPATTERN/\{X\}/"*"} > merged_ts.ts
+
+# Remove all .ts files except merged_ts.ts
+# find . -type f -not -name 'merged_ts.ts' -delete
+# find . -type f -not -name 'merged_ts.ts'
+find . -type f -name '*.ts' -and -not -name 'merged_ts.ts' -delete
+
+# Convert to mp4
+ffmpeg -i 'merged_ts.ts' -acodec copy -vcodec copy -bsf:a aac_adtstoasc $FILENAME.mp4
+# ffmpeg -i 'merged_ts.ts' -acodec copy -vcodec copy -bsf:a aac_adtstoasc $FILENAME''2.mp4 using ffmpeg
+# ffmpeg -i $CNT'_all.ts' -acodec copy -vcodec copy -bsf:a aac_adtstoasc ../../$FOLDERNAME/$NAME.mp4
