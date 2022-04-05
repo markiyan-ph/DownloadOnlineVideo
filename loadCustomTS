@@ -1,0 +1,31 @@
+#!/bin/bash
+
+LINKPATTERN="$1"
+FILESAMOUNT="${2:-250}"
+FILESLOADED=0
+CURRDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Go to tmp folder
+cd $CURRDIR/tmp
+CURRDIR=$(pwd)
+
+# Load file one by one
+for (( i=1; i<=$FILESAMOUNT; i++ ))
+do
+	# Download files: wget ${LINKPATTERN/\{X\}/$i} --no-check-certificate
+	# LOAD_STATUS=$(wget --server-response ${LINKPATTERN/\{X\}/$i} -O ip-tmp 2>&1| grep -c 'HTTP/1.1 200 OK')
+	# LOAD_STATUS=$(wget --server-response ${LINKPATTERN/\{X\}/$i} 2>&1 | awk '/^  HTTP/{print $2}')
+
+	LOADED=$(wget --server-response ${LINKPATTERN/\{X\}/$i} --no-check-certificate 2>&1 | awk '/^  HTTP/{print $2}')
+	if [ $LOADED == 200 ]; then
+		FILESLOADED=$i
+	fi
+done
+
+# Show notification
+# notify-send is working for Linux XFFCE
+# notify-send -i $CURRDIR/downloadB.png -t 3000 'File '$NAME' is downloaded'
+
+# Show notification on MacOS
+# osascript -e 'display notification "File '$NAME' is downloaded" with title "Done"'
+osascript -e 'display notification "'$FILESLOADED' files have beed downloaded" with title "Download complete"'
