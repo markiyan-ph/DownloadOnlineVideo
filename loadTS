@@ -29,7 +29,7 @@ for URL in ${LINK[@]}; do
     DIR="${URL##*/}"
 
     # download all videos
-    wget $URL''{0..550}.ts
+    wget $URL''{0..550}.ts --no-check-certificate
     # or you can use "curl" instead of "wget"
     # curl $URL''{0..900}.ts -o
 
