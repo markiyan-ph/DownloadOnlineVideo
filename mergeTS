@@ -3,14 +3,49 @@
 # Pattern should contain {X}
 # Example 360.mp4:hls:seg-{X}-v1-a1.ts
 FILEPATTERN="$1" 
-FILENAME="${2:-NewVideo}" 
+FILESAMOUNT="${2:-300}"
+DIRNAME="$3"
+FILENAME="$4"
+CURRDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# Enter 3rd parameter if it doesn't exist
+if [ -z "$3" ]
+  then
+    read  -n 50 -p "Input directory name: " DIRNAME
+fi
+
+# Enter 4th parameter if it doesn't exist
+if [ -z "$4" ]
+  then
+    read  -n 50 -p "Input File name: " FILENAME
+fi
+
+cd $CURRDIR/tmp
+CURRDIR=$(pwd)
+
+# Remove previously created "tslist" "merged_ts.ts" files
+rm tslist merged_ts.ts
+
+# Create list of files
+for (( i=1; i<=$FILESAMOUNT; i++ ))
+do  
+    echo ${FILEPATTERN/\{X\}/$i} | tr " " "\n" >> tslist
+done
+
+# Merge ts files in one file
+while read line; do cat $line >> merged_ts.ts; done < tslist
+
+# Check if DIR exist and create it if it doesn't
+if [ ! -d ../../$DIRNAME ]; then
+  mkdir -p ../../$DIRNAME;
+fi
 
 # ${FILEPATTERN/\{X\}/"*"} code it's a bash code (${parameter/pattern/string}) to replace {X} from pattern by * 
 # Cat command concantenate all ts files in one
-cat ${FILEPATTERN/\{X\}/"*"} > merged_ts.ts
+# cat ${FILEPATTERN/\{X\}/"*"} > merged_ts.ts
 
 # Find all .ts files except merged_ts.ts and delete
-find . -type f -name '*.ts' -and -not -name 'merged_ts.ts' -delete
+find $CURRDIR -type f -name '*.ts' -and -not -name 'merged_ts.ts' -delete
 
 # Convert to mp4
-ffmpeg -i 'merged_ts.ts' -acodec copy -vcodec copy -bsf:a aac_adtstoasc $FILENAME.mp4
+ffmpeg -i merged_ts.ts -acodec copy -vcodec copy -bsf:a aac_adtstoasc ../../$DIRNAME/$FILENAME.mp4
