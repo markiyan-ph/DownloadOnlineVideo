@@ -10,6 +10,7 @@
 LINK="$2"
 NAME="$1"
 FOLDERNAME="$3"
+MAX="$4"
 CURRDIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # mkdir my-videos
@@ -29,13 +30,16 @@ for URL in ${LINK[@]}; do
     DIR="${URL##*/}"
 
     # download all videos
-    wget $URL''{0..550}.ts --no-check-certificate
-    # or you can use "curl" instead of "wget"
-    # curl $URL''{0..900}.ts -o
-
+    # you can use "curl" instead of "wget"
+    # curl example: curl $URL''{0..900}.ts -o 
+    seq 0 "$MAX" | awk -v url="$URL" '{print url $1 ".ts"}' | xargs wget --no-check-certificate
+    
     # link videos
-    echo $DIR''{0..550}.ts | tr " " "\n" >tslist
-    while read line; do cat $line >>$CNT'_all.ts'; done <tslist
+    seq 0 "$MAX" | awk -v dir="$DIR" '{print dir $1 ".ts"}' > tslist
+ 
+    while read -r line; do
+      cat "$line" >> "${CNT}_all.ts"
+    done < tslist
 
     rm -rf media* tslist
 

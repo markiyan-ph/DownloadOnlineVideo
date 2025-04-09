@@ -17,7 +17,7 @@ def getFolderName(name):
     return result
 
 
-def runScript(name):
+def runScript(name, filesAmount):
     # link = raw_input('Link: ')
     link = input('Link: ')
     matchLink = re.match(r'.+/segment', link).group()
@@ -28,16 +28,21 @@ def runScript(name):
     if matchLink:
         # print(matchLink)
         # print(folderName)
-        subprocess.check_call([script, name, matchLink, folderName])
+        subprocess.check_call([script, name, matchLink, folderName, filesAmount])
     else:
         print('SEGMENT NOT FOUND')
 
 
-if len(sys.argv) > 1:
+if len(sys.argv) > 2:
     name = str(sys.argv[1])
+    files_amount = str(sys.argv[2])
 else:
-    # name = raw_input('Name: ')
-    name = input('Name: ')
+    files_amount = '550'
+    if len(sys.argv) > 1:
+        name = str(sys.argv[1])
+    else:
+        # name = raw_input('Name: ')
+        name = input('Name: ')
 
 
-runScript(name)
+runScript(name, files_amount)
