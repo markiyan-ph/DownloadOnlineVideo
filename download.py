@@ -27,7 +27,6 @@ def runScript(name, filesAmount):
 
     if matchLink:
         # print(matchLink)
-        # print(folderName)
         subprocess.check_call([script, name, matchLink, folderName, filesAmount])
     else:
         print('SEGMENT NOT FOUND')
